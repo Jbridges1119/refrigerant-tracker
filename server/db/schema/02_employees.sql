@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS employees CASCADE;
+
+CREATE TABLE employees (
+  id SERIAL PRIMARY KEY NOT NULL,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE
+);
