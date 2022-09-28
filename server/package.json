@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "refrigerant-tracker backend and database",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "db:reset": "node bin/resetdb.js"
+  },
+  "author": "Jeff Bridges",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "method-override": "^3.0.0",
+    "morgan": "~1.9.1",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
