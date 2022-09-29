@@ -19,10 +19,10 @@ app.use(express.json());
 // ROUTES
 
 const usersRoutes = require("./routes/users");
+const companiesRoutes = require("./routes/companies");
 
-
-app.use("/api/users", usersRoutes(db));
-
+app.use("/users", usersRoutes(db));
+app.use("/companies", companiesRoutes(db));
 
 //SERVER CONNECTION
 const port = process.env.PORT || 3005;
