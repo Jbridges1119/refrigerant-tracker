@@ -18,6 +18,7 @@ INSERT INTO work_order_refrigerant (work_order_id, refrigerant_id)
 VALUES (52, 1);
 INSERT INTO work_order_refrigerant (work_order_id, refrigerant_id)
 VALUES (51, 2);
+
 INSERT INTO work_order_refrigerant (work_order_id, refrigerant_id)
 VALUES (50, 8);
 INSERT INTO work_order_refrigerant (work_order_id, refrigerant_id)
