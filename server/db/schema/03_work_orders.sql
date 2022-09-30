@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS work_orders CASCADE;
 
 CREATE TABLE work_orders (
   id SERIAL PRIMARY KEY NOT NULL,
+  number INT NOT NULL,
   amount DEC NOT NULL,
   date DATE NOT NULL,
   employee_id INTEGER REFERENCES employees(id) ON DELETE CASCADE
