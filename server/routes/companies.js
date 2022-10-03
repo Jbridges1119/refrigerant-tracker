@@ -69,7 +69,14 @@ module.exports = (db) => {
     WHERE work_order_id = $1`;
     const query5 = `DELETE FROM work_orders
     WHERE work_orders.number = $1`;
-
+    const query6 = `INSERT INTO work_orders (amount, number, date, employee_id)
+    VALUES ($1, $2, CURRENT_DATE, $3) RETURNING id;`;
+    const query7 = `UPDATE refrigerants SET current_bottle_used = current_bottle_used + $2 
+    FROM employee_refrigerant, employees
+    WHERE type = $1 AND employees.id = $3 AND employee_id = employees.id AND refrigerant_id = refrigerants.id
+    RETURNING refrigerants.id;`;
+    const query8 = `INSERT INTO work_order_refrigerant (work_order_id, refrigerant_id)
+    VALUES ($1, $2);`;
     db.query(query1, [workOrderNumber])
       .then((data1) => {
         const info = data1.rows;
@@ -79,7 +86,7 @@ module.exports = (db) => {
           db.query(query2, [Number(amount), refrigerant_id]);
         });
       })
-      //All info from work order has been deleted at this point - now creating new work-order with same number
+      //All info for work order has been deleted at this point - now creating new work-order with same number and updated info
       .then(() => {
         db.query(query3, [workOrderNumber])
           .then((data3) => {
@@ -89,15 +96,8 @@ module.exports = (db) => {
             });
           })
           .then(() => {
-            db.query(query5, [workOrderNumber]).then(() => {
-              const query6 = `INSERT INTO work_orders (amount, number, date, employee_id)
-                            VALUES ($1, $2, CURRENT_DATE, $3) RETURNING id;`;
-              const query7 = `UPDATE refrigerants SET current_bottle_used = current_bottle_used + $2 
-                            FROM employee_refrigerant, employees
-                            WHERE type = $1 AND employees.id = $3 AND employee_id = employees.id AND refrigerant_id = refrigerants.id
-                            RETURNING refrigerants.id;`;
-              const query8 = `INSERT INTO work_order_refrigerant (work_order_id, refrigerant_id)
-                            VALUES ($1, $2);`;
+            db.query(query5, [workOrderNumber])
+            .then(() => {
               req.body.map((item) => {
                 const { employeeId, type, amount } = item;
                 const params2 = [amount, workOrderNumber, employeeId];
@@ -121,5 +121,23 @@ module.exports = (db) => {
           });
       });
   });
+
+  router.get("/:companyId/workorder/list/:offset", (req, res) => {
+    const { offset } = req.params;
+    console.log(offset);
+    const query1 = `SELECT distinct work_orders.number, first_name, last_name, date FROM work_orders 
+                  JOIN employees ON employee_id = employees.id
+                  ORDER BY date DESC, work_orders.number
+                  LIMIT 10 OFFSET $1;`;
+    db.query(query1, [offset])
+      .then((data1) => {
+        const info = data1.rows;
+        res.json({ info });
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
+  });
+
   return router;
 };
