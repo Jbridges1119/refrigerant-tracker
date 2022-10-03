@@ -63,8 +63,7 @@ module.exports = (db) => {
     const query3 = `SELECT work_order_refrigerant.id 
     FROM work_order_refrigerant
     JOIN work_orders ON work_order_id = work_orders.id 
-    WHERE work_orders.number = $1;
-    `;
+    WHERE work_orders.number = $1;`;
     const query4 = `DELETE FROM work_order_refrigerant
     WHERE work_order_id = $1`;
     const query5 = `DELETE FROM work_orders
