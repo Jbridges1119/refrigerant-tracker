@@ -1,7 +1,7 @@
 INSERT INTO work_orders (number, amount, date, employee_id)
 VALUES (1, 2.25, '2021-11-11', '6');
 INSERT INTO work_orders (number, amount, date, employee_id)
-VALUES (2, 6.75, '2021-01-22', '6');
+VALUES (2, 6.75, '2022-10-02', '6');
 INSERT INTO work_orders (number, amount, date, employee_id)
 VALUES (3, 12.25, '2021-06-05', '6');
 INSERT INTO work_orders (number, amount, date, employee_id)
@@ -81,11 +81,11 @@ VALUES (37, 5.5, '2021-12-24', '3');
 INSERT INTO work_orders (number, amount, date, employee_id)
 VALUES (38, 12.25, '2021-12-24', '2');
 INSERT INTO work_orders (number, amount, date, employee_id)
-VALUES (39, 12.75, '2021-12-24', '2');
+VALUES (39, 12.75, '2022-07-24', '2');
 INSERT INTO work_orders (number, amount, date, employee_id)
 VALUES (40, 2.25, '2021-09-29', '2');
 INSERT INTO work_orders (number, amount, date, employee_id)
-VALUES (41, 8, '2021-09-29', '2');
+VALUES (41, 8, '2022-09-29', '2');
 INSERT INTO work_orders (number, amount, date, employee_id)
 VALUES (42, 12, '2021-09-29', '2');
 INSERT INTO work_orders (number, amount, date, employee_id)
