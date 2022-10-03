@@ -50,7 +50,7 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
-
+//Resets current bottle amount and adds 1 to bottle used
   router.post("/addbottle", (req, res) => {
     const { company, id, type } = req.body;
     const params = [company, id, type];
@@ -66,7 +66,7 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
-//Adds input of refrigerant amount, type, and employee into database under latest work-order number. Then updates employees current bottle amounts used and returns all info for latest work-order 
+//Create Work order and add used amount to employee bottle amount
   router.post("/workorder", (req, res) => {
     const { employeeId, type, amount } = req.body;
     console.log(req.body);
@@ -111,8 +111,24 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
-
-
+//List of employee work orders
+  router.get("/:employeeId/workorder/list/:offset", (req, res) => {
+    const { offset, employeeId } = req.params;
+    console.log(offset);
+    const query1 = `SELECT distinct work_orders.number, first_name, last_name, date FROM work_orders 
+                  JOIN employees ON employee_id = employees.id
+                  WHERE employees.id = $2
+                  ORDER BY date DESC, work_orders.number
+                  LIMIT 10 OFFSET $1;`;
+    db.query(query1, [offset, employeeId])
+      .then((data1) => {
+        const info = data1.rows;
+        res.json({ info });
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err.message });
+      });
+  });
 
   return router;
 };
