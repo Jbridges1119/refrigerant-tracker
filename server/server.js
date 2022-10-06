@@ -5,6 +5,7 @@ const db = require("./db");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const app = express();
+const session = require('express-session')
 app.use(express.json());
 //MIDDLEWARE
 //Morgan - console.logs server connection info on request
@@ -13,7 +14,15 @@ app.use(cors());
 app.use(morgan("common"));
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
-
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: true,
+  resave: false,
+  cookie: {
+    httpOnly: true,
+    maxAge: parseInt(process.env.LIFETIME)
+  }
+}))
 
 
 // ROUTES
