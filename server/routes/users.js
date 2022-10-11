@@ -44,7 +44,6 @@ module.exports = (db) => {
         db.query(query2, [users[0].id]).then((data2) => {
           const userInfo = data2.rows;
           delete users[0].password
-          
           res.json({ userInfo, users });
         });
       })
