@@ -23,11 +23,11 @@ module.exports = (db) => {
   });
 
   router.post("/login", (req, res) => {
-    const { company, email, password } = req.body;
-    const params = [company, email, password];
-    const query1 = `SELECT companies.name, email, employees.password, employees.id FROM employees
+    const {  email, password } = req.body;
+    const params = [ email, password];
+    const query1 = `SELECT companies.name as company, first_name,last_name, email, employees.password, employees.id FROM employees
     JOIN companies ON company_id = companies.id 
-    WHERE company_id = $1 AND email = $2 AND employees.password = $3;`;
+    WHERE email = $1 AND employees.password = $2;`;
     const query2 = `SELECT SUM(work_orders.amount) AS total, type, current_bottle_used, bottle_count, first_name, last_name, companies.name  
     FROM employees 
     JOIN work_orders ON employee_id = employees.id 
@@ -43,7 +43,9 @@ module.exports = (db) => {
           return res.json({ error: "Please enter a valid email and password" });
         db.query(query2, [users[0].id]).then((data2) => {
           const userInfo = data2.rows;
-          res.json({ userInfo });
+          delete users[0].password
+          
+          res.json({ userInfo, users });
         });
       })
       .catch((err) => {
