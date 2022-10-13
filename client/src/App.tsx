@@ -2,60 +2,42 @@ import { Button, Stack, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./styles/App.css";
+import Login from './pages/Login/Login'
+import LandingPage from './pages/LandingPage/LandingPage'
+import { log } from "console";
+
+axios.defaults.withCredentials = true; //
 
 function App() {
-  const [email, setEmail] = useState("jbridges1119@gmail.com");
-  const [password, setPassword] = useState("qqqqqqqq");
-  const [loginStatus, setLoginStatus] = useState("");
-  const login = () => {
-    axios
-      .post("http://localhost:3005/users/login", {
-        email: email,
-        password: password,
-      })
-      .then((data) => {
-        if (data.data.error) {
-          setLoginStatus(data.data.error);
-          console.log(data.data.error);
-        } else {
-          setLoginStatus("")
-          console.log(data);
-          
-        }
-      });
-  };
+  const [loggedIn, setLoggedIn] = useState(false)
+
+ 
+
+
+  useEffect(() =>{
+    axios.get("http://localhost:3005/users/login")
+    .then(info => {
+      console.log("test",info);
+      setLoggedIn(info.data.loggedIn) 
+    })
+    .catch((err) => {
+      console.log(err)
+    });
+  }, [])
 
   return (
     <div className="App">
-      <Stack>
-      <Typography variant="body1">Email</Typography>
-        <TextField
-          id="email"
-          
-          variant="standard"
-          value="jbridges1119@gmail.com"
-          // onChange={(e) => {
-          //   setEmail(e.target.value);
-          // }}
-        />
-        <Typography variant="body1">Password</Typography>
-        <TextField
-          id="outlined-password-input"
+      {loggedIn ? 
+      <LandingPage />
     
-          autoComplete="current-password"
-          type="password"
-          variant="standard"
-          value="qqqqqqq"
-          // onChange={(e) => {
-          //   setPassword(e.target.value);
-          // }}
-        />
-
-        <Button variant="contained" onClick={login}>
-          Login
-        </Button>
-        <Typography variant="h6">{loginStatus}</Typography>
-      </Stack>
+    
+    
+    
+    
+    
+    
+    : <Login setLoggedIn={setLoggedIn}/>
+    }
     </div>
   );
 }
