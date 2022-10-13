@@ -26,7 +26,7 @@ module.exports = (db) => {
 
   router.post("/login", (req, res) => {
     bcrypt.hash('qqqqqqqq', saltRounds, (err, hash) =>{
-   
+   console.log(hash);
     })
     const {  email, password } = req.body;
     const params = [ email ];
@@ -51,23 +51,34 @@ module.exports = (db) => {
         bcrypt.compare(password, users[0].password, (error, result) => {
           console.log(password, users[0].password )
           if (result) {
-            db.query(query2, [users[0].id]).then((data2) => {
+            
+            db.query(query2, [users[0].id])
+            .then((data2) => {
               const userInfo = data2.rows;
               delete users[0].password
+              req.session.user = users
+              console.log(req.session.user);
               res.json({ userInfo, users });
             });
           } else {
             return res.json({ error: "Incorrect email or password" });
           }
         })
-          
-        
-     
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
       });
   });
+
+  router.get("/login", (req,res) => {
+    console.log("session",req.session)
+    if (req.session.user) {
+      req.sessionID({ loggedIn: true, user: req.session.user});
+    } else {
+      res.send({ loggedIn: false});
+    }
+  })
+
 //Resets current bottle amount and adds 1 to bottle used
   router.post("/addbottle", (req, res) => {
     const { company, id, type } = req.body;
