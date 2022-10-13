@@ -1,26 +1,35 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
-const db = require("./db");
-const methodOverride = require("method-override");
+const cors = require("cors");//Prevents Cors error
+const db = require("./db");//DataBase Connection
+const methodOverride = require("method-override");//Allows for delete & put 
+// const bodyParser = require('body-parser');//Comes with express now
+const cookieParser = require("cookie-parser");//Parse our cookies
 const morgan = require("morgan");
 const app = express();
-const session = require('express-session')
+const session = require('express-session');//Creating cookie sessions
 app.use(express.json());
+
 //MIDDLEWARE
-//Morgan - console.logs server connection info on request
-//CookieSession - encrypted cookie
-app.use(cors());
+//
+app.use(cors({
+  origin: ["http://localhost:3000"],//our client location -- update when hosting
+  methods: ["GET", "POST"],
+  credentials: true //Without this you can have an error
+}));
 app.use(morgan("common"));
 app.use(methodOverride("_method"));
+app.use(cookieParser());
+// app.use(bodyParser.urlencoded({ extended: true }));//Shouldn't need it 
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  saveUninitialized: true,
+  saveUninitialized: false,
   resave: false,
   cookie: {
     httpOnly: true,
-    maxAge: parseInt(process.env.LIFETIME)
+    maxAge: 60 * 60 * 24
+    // maxAge: parseInt(process.env.LIFETIME)
   }
 }))
 
