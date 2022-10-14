@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
+const jwt = require('jsonwebtoken');
 module.exports = (db) => {
   router.get("/", (req, res) => {
     const params = [];
@@ -46,7 +46,7 @@ module.exports = (db) => {
       .then((data1) => {
         const users = data1.rows;
         if (!users.length){
-          return res.json({ error: "Email does not exist" });
+          return res.json({auth:false, error: "Email does not exist" });
         }
         bcrypt.compare(password, users[0].password, (error, result) => {
           // console.log(password, users[0].password )
@@ -55,25 +55,48 @@ module.exports = (db) => {
             db.query(query2, [users[0].id])
             .then((data2) => {
               const userInfo = data2.rows;
-              delete users[0].password
-              req.session.user = users[0]
-              console.log("should be id:", req.session.user);
-              res.send(users );
+              delete users[0].password;
+              req.session.user = users[0];
+              // console.log("should be id:", req.session.user);
+              const id = users[0].id;
+              const token = jwt.sign({id}, process.env.jwt_SECRET);
+              
+              res.send( {users, userInfo, auth:true, token: token} );
             });
           } else {
-            return res.json({ error: "Incorrect email or password" });
+            return res.json({auth:false,  error: "Incorrect email or password" });
           }
         })
       })
       .catch((err) => {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({auth:false, error: err.message });
       });
   });
 
+  const verifyJWT = (req, res, next) => {
+    const token = req.headers["x-access-token"];
+
+    if (!token) {
+      res.send("Not authorized");
+    } else {
+      jwt.verify(token, process.env.jwt_SECRET, (err, decoded) =>{
+        if(err) {
+          res.json({auth: false, message: "Authorization failed"});
+        } else {
+          req.userId = decoded.id;
+          next();
+        }
+      })
+    }
+  }
+
+  router.get('/isUserAuth', verifyJWT, (req,res) => {
+    res.send("Authenticated");
+  })
+
   router.get("/login", (req,res) => {
-    console.log("session here",req.session)
+    // console.log("session here",req.session)
     if (req.session.user) {
-      // res.send({ loggedIn: true});
       res.send({ loggedIn: true, user: req.session});
     } else {
       res.send({ loggedIn: false});
