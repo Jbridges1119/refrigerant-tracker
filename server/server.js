@@ -8,10 +8,11 @@ const cookieParser = require("cookie-parser");//Parse our cookies
 const morgan = require("morgan");
 const app = express();
 const session = require('express-session');//Creating cookie sessions
+const jwt = require('jsonwebtoken');
 app.use(express.json());
 
 //MIDDLEWARE
-//
+
 app.use(cors({
   origin: ["http://localhost:3000"],//our client location -- update when hosting
   methods: ["GET", "POST"],
@@ -28,7 +29,7 @@ app.use(session({
   saveUninitialized: false,
   resave: false,
   cookie: {
-    expires: 60 * 60 * 24 * 1000
+    expires: 60 * 60 * 24 *  1000
     // maxAge: parseInt(process.env.LIFETIME)
   }
 }))
