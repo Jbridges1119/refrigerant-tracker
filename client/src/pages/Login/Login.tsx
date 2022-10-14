@@ -20,13 +20,14 @@ const Login: React.FC<props> = ({setLoggedIn}) => {
         password: password,
       })
       .then((data) => {
-        if (data.data.error) {
+        if (!data.data.auth) {
           setLoginStatus(data.data.error);
           console.log(data.data.error);
+          setLoggedIn(false)
         } else {
           setLoginStatus("")
           console.log(data);
-          
+          setLoggedIn(true)
         }
       });
   };
