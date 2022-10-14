@@ -23,12 +23,12 @@ app.use(cookieParser());
 // app.use(bodyParser.urlencoded({ extended: true }));//Shouldn't need it 
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
+  key: "userID",
   secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
   resave: false,
   cookie: {
-    httpOnly: true,
-    maxAge: 60 * 60 * 24
+    expires: 60 * 60 * 24 * 1000
     // maxAge: parseInt(process.env.LIFETIME)
   }
 }))

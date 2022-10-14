@@ -49,16 +49,16 @@ module.exports = (db) => {
           return res.json({ error: "Email does not exist" });
         }
         bcrypt.compare(password, users[0].password, (error, result) => {
-          console.log(password, users[0].password )
+          // console.log(password, users[0].password )
           if (result) {
             
             db.query(query2, [users[0].id])
             .then((data2) => {
               const userInfo = data2.rows;
               delete users[0].password
-              req.session.user = users
-              console.log(req.session.user);
-              res.json({ userInfo, users });
+              req.session.user = users[0]
+              console.log("should be id:", req.session.user);
+              res.send(users );
             });
           } else {
             return res.json({ error: "Incorrect email or password" });
@@ -71,9 +71,10 @@ module.exports = (db) => {
   });
 
   router.get("/login", (req,res) => {
-    console.log("session",req.session)
+    console.log("session here",req.session)
     if (req.session.user) {
-      req.sessionID({ loggedIn: true, user: req.session.user});
+      // res.send({ loggedIn: true});
+      res.send({ loggedIn: true, user: req.session});
     } else {
       res.send({ loggedIn: false});
     }
