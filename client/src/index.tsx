@@ -7,7 +7,10 @@ import Provider from "./context/sharedContext";
 import { BrowserRouter } from "react-router-dom";
 import ScrollToTop from "./hooks/ScrollToTop";
 import axios from "axios";
-
+//MUI
+import {  ThemeProvider } from "@mui/material";
+//Style
+import theme from "./styles/theme";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -18,11 +21,13 @@ if (process.env.REACT_APP_API_BASE_URL) {
 root.render(
   <React.StrictMode>
     <Provider>
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <ScrollToTop>
           <App />
         </ScrollToTop>
       </BrowserRouter>
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );
