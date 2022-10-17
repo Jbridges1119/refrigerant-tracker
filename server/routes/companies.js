@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = (db) => {
-  //Company employee data
+  //Company all employee data
   router.get("/:companyId", (req, res) => {
     const { companyId } = req.params;
     const params = [companyId];
@@ -26,7 +26,7 @@ module.exports = (db) => {
       });
   });
 
-  //Company Work Order data
+  //Work Order data
   router.get("/:companyId/workorder/:workOrderNumber", (req, res) => {
     const { workOrderNumber } = req.params;
     console.log(workOrderNumber);
@@ -44,6 +44,7 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
+
   //Deletes old w/o info and joining table column data
   //Removes refrigerant from employee current amount used
   //Creates work order under the same work order number as before
@@ -120,14 +121,15 @@ module.exports = (db) => {
           });
       });
   });
-
+//List of work orders by 10
   router.get("/:companyId/workorder/list/:offset", (req, res) => {
     const { offset } = req.params;
     console.log(offset);
-    const query1 = `SELECT distinct work_orders.number, first_name, last_name, date FROM work_orders 
-                  JOIN employees ON employee_id = employees.id
-                  ORDER BY date DESC, work_orders.number
-                  LIMIT 10 OFFSET $1;`;
+    const query1 = `SELECT distinct work_orders.number, first_name, last_name, date 
+      FROM work_orders 
+      JOIN employees ON employee_id = employees.id
+      ORDER BY date DESC, work_orders.number
+      LIMIT 10 OFFSET $1;`;
     db.query(query1, [offset])
       .then((data1) => {
         const info = data1.rows;
