@@ -1,19 +1,19 @@
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import "./styles/App.css";
+
 import Login from './pages/Login/Login'
-import LandingPage from './pages/LandingPage/LandingPage'
-
-
-
+import LandingPage from './pages/01_LandingPage/01_LandingPage'
+import {  Routes, Route } from "react-router-dom";
+import NavBar from "./NavBar"
+import Footer from "./Footer";
+import Terms from "./Terms"
+import Privacy from "./Privacy"
 
 function App() {
+  axios.defaults.withCredentials = true;
   const [loggedIn, setLoggedIn] = useState(false)
 
- 
-
-axios.defaults.withCredentials = true;
   useEffect(() =>{
     axios.get("http://localhost:3005/users/login")
     .then(info => {
@@ -24,20 +24,44 @@ axios.defaults.withCredentials = true;
     });
   }, [])
 
+  const BoxSX = {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+
+    alignItems: "space-between",
+    alignContent: 'space-between',
+    backgroundColor: '#F5F7FF',
+    minHeight: '10000px'
+  };
+
   return (
-    <div className="App">
+   <>
+      <Routes>
+      <Route path="/Terms" element={<Terms/>} />
+      <Route path="/Privacy" element={<Privacy/>} />
       {loggedIn ? 
-      <LandingPage />
+      <>
+      <NavBar />
+      <Route path="/" element={<LandingPage />} />
+     
     
     
     
     
     
     
-    
-    : <Login setLoggedIn={setLoggedIn}/>
+      
+      </>
+    : <Route path="/*" element={<Login setLoggedIn={setLoggedIn}/>} />
     }
-    </div>
+   
+    </Routes>
+    <Footer/>
+    
+    
+    </>
   );
 }
 
