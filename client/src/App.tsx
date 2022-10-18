@@ -38,12 +38,12 @@ function App() {
 
   return (
    <>
+      {loggedIn && <NavBar />}
       <Routes>
       <Route path="/Terms" element={<Terms/>} />
       <Route path="/Privacy" element={<Privacy/>} />
       {loggedIn ? 
       <>
-      <NavBar />
       <Route path="/" element={<LandingPage />} />
      
     
@@ -56,7 +56,6 @@ function App() {
       </>
     : <Route path="/*" element={<Login setLoggedIn={setLoggedIn}/>} />
     }
-   
     </Routes>
     <Footer/>
     
