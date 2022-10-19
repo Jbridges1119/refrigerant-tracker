@@ -28,7 +28,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
   resave: false,
+ 
   cookie: {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'none',
     expires: 60 * 60 * 24 *  1000
     // maxAge: parseInt(process.env.LIFETIME)
   }
