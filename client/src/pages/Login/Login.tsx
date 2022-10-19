@@ -10,13 +10,14 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import TypeWriter from "typewriter-effect";
+import { usePageLocation } from "../../context/sharedContext";
 
-type props = {
-  setLoggedIn: (loggedIn: boolean) => void;
-};
+// type props = {
+//   setLoggedIn: (loggedIn: boolean) => void;
+// };
 
-const Login: React.FC<props> = ({ setLoggedIn }) => {
+const Login: React.FC = () => {
+  const {loggedIn, setLoggedIn, setUserInfo, setUserData} = usePageLocation();
   const [email, setEmail] = useState("jbridges1119@gmail.com");
   const [password, setPassword] = useState("qqqqqqqq");
   const [loginStatus, setLoginStatus] = useState("");
@@ -36,6 +37,9 @@ const Login: React.FC<props> = ({ setLoggedIn }) => {
           setLoginStatus("");
           console.log(data);
           setLoggedIn(true);
+          setUserInfo(data.data.users)
+          setUserData(data.data.userInfo)
+          
         }
       });
   };
