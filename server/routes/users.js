@@ -24,10 +24,15 @@ module.exports = (db) => {
       });
   });
 
+  router.get("/logout", (req, res) => {
+    res.clearCookie('userID', { path: '/' });
+    res.sendStatus(200)
+  })
+
   router.post("/login", (req, res) => {
-    bcrypt.hash('qqqqqqqq', saltRounds, (err, hash) =>{
-   console.log(hash);
-    })
+  //   bcrypt.hash('qqqqqqqq', saltRounds, (err, hash) =>{
+  //  console.log(hash);
+  //   })
     const {  email, password } = req.body;
     const params = [ email ];
     const query1 = `SELECT companies.name as company, first_name,last_name, email, employees.id, employees.password 
@@ -58,10 +63,10 @@ module.exports = (db) => {
               delete users[0].password;
               req.session.user = users[0];
               // console.log("should be id:", req.session.user);
-              const id = users[0].id;
-              const token = jwt.sign({id}, process.env.jwt_SECRET);
+              // const id = users[0].id;
+              // const token = jwt.sign({id}, process.env.jwt_SECRET);
               
-              res.send( {users, userInfo, auth:true, token: token} );
+              res.send( {users, userInfo, auth:true} );
             });
           } else {
             return res.json({auth:false,  error: "Incorrect email or password" });
