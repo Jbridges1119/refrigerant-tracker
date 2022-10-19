@@ -109,7 +109,7 @@ const Login: React.FC = () => {
           />
         </InputBox>
         <Button variant="contained" onClick={login}>
-          Login
+         <Link to="/" style={{textDecoration: 'none', color: 'inherit'}}>Login</Link> 
         </Button>
         <Typography variant="body2" width={"90%"}>
           By signing in, you agree to the FreonTrak <Link to="/Terms">Terms of Service</Link> and <Link to="/Privacy">Privacy Policy</Link>.

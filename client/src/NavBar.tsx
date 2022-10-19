@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { usePageLocation } from "./context/sharedContext";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const pages = ["Overview", "Work Orders", "Create New"];
 
@@ -150,7 +151,7 @@ const NavBar = () => {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Button color="inherit" onClick={()=>{logout()}}>Logout</Button>
+            <Button color="inherit" onClick={()=>{logout()}}><Link to='/login' style={{color: 'inherit', textDecoration:'none'}}>Logout</Link></Button>
           </Box>
         </Toolbar>
       </Container>
